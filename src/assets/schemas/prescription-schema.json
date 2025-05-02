@@ -1,249 +1,209 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Prescription",
-  "description": "Schema for structuring glasses prescription information.",
+  "description": "Schema for structuring glasses prescription information based on instructions.",
   "type": "object",
   "properties": {
     "patient": {
       "type": "object",
       "description": "Information about the patient.",
       "properties": {
-        "name": {
+        "firstName": {
           "type": "string",
           "description": "Patient's first name."
         },
-        "surname": {
+        "lastName": {
           "type": "string",
           "description": "Patient's last name."
         },
-        "age": {
-          "type": "number",
-          "nullable": true,
-          "description": "Patient's age in years. Null if not provided."
+        "birthdate": {
+          "type": "string",
+          "format": "date",
+          "description": "Patient's birth date in YYYY-MM-DD format."
         }
       },
       "required": [
-        "name",
-        "surname"
+        "firstName",
+        "lastName"
       ]
     },
     "prescriber": {
       "type": "object",
       "description": "Information about the prescriber.",
       "properties": {
-        "doctorFullname": {
+        "fullName": {
           "type": "string",
-          "description": "Full name of the doctor."
+          "description": "Full name of the prescriber/doctor."
         },
-        "organization": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Clinic or hospital name. Optional."
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Prescriber's email address."
+        },
+        "address": {
+          "type": "string",
+          "description": "Address of the prescriber's office."
+        },
+        "adeliNumber": {
+          "type": "string",
+          "description": "ADELI identification number, format: 0-9 digits.",
+          "pattern": "\\b0?\\d{9}\\b"
         }
       },
       "required": [
-        "doctorFullname"
+        "fullName"
       ]
     },
-    "dates": {
+    "prescription": {
       "type": "object",
-      "description": "Dates related to the prescription.",
+      "description": "Details of the prescription.",
       "properties": {
-        "prescripted": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date",
-          "description": "Prescription date."
-        },
-        "expiryDate": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "format": "date",
-          "description": "Expiry date of the prescription."
-        }
-      },
-      "required": [
-        "prescripted",
-        "expiryDate"
-      ]
-    },
-    "corrections": {
-      "type": "object",
-      "description": "Correction details for the glasses prescription.",
-      "properties": {
-        "vision": {
+        "prescribedAt": {
           "type": "string",
-          "enum": [
-            "VL",
-            "VP",
-            "VA"
-          ],
-          "description": "Vision type: VL (Distance), VP (Near), VA (Pediatric)."
+          "format": "date",
+          "description": "Date when prescription was issued in YYYY-MM-DD format."
         },
-        "VL": {
-          "type": "boolean",
-          "description": "Distance vision (EN: Distance vision, FR: Vision de loin)."
+        "expirationDate": {
+          "type": "string",
+          "format": "date",
+          "description": "End date of validity period in YYYY-MM-DD format."
         },
-        "VP": {
-          "type": "boolean",
-          "description": "Near vision (EN: Near vision, FR: Vision de près)."
+        "right": {
+          "type": "object",
+          "description": "Prescription for right eye (OD - Œil droit).",
+          "properties": {
+            "visionType": {
+              "type": "string",
+              "enum": [
+                "VL",
+                "VP"
+              ],
+              "description": "Type of vision correction: VL (far vision), VP (near vision)."
+            },
+            "sphere": {
+              "type": "number",
+              "description": "Spherical correction, range from -20 to +20."
+            },
+            "cylinder": {
+              "type": "number",
+              "description": "Cylindrical correction, range from -10 to 0."
+            },
+            "axis": {
+              "type": "number",
+              "description": "Axis value, range from 0 to 180."
+            },
+            "add": {
+              "type": "number",
+              "description": "Addition value, range from 0 to 4."
+            },
+            "deg": {
+              "type": "number",
+              "description": "Degression value, range from 0 to 360."
+            },
+            "base": {
+              "type": "string",
+              "enum": [
+                "IN",
+                "OUT",
+                "UP",
+                "DOWN"
+              ],
+              "description": "Direction of the base."
+            },
+            "pd": {
+              "type": "number",
+              "description": "Pupillary distance in mm for right eye."
+            },
+            "va": {
+              "type": "string",
+              "description": "Visual acuity for right eye."
+            }
+          },
+          "required": [
+            "visionType",
+            "sphere",
+            "cylinder",
+            "axis"
+          ]
         },
-        "VA": {
-          "type": "boolean",
-          "description": "Pediatric vision (EN: Pediatric vision, FR: Vision de l’enfant)."
+        "left": {
+          "type": "object",
+          "description": "Prescription for left eye (OG - Œil gauche).",
+          "properties": {
+            "visionType": {
+              "type": "string",
+              "enum": [
+                "VL",
+                "VP"
+              ],
+              "description": "Type of vision correction: VL (far vision), VP (near vision)."
+            },
+            "sphere": {
+              "type": "number",
+              "description": "Spherical correction, range from -20 to +20."
+            },
+            "cylinder": {
+              "type": "number",
+              "description": "Cylindrical correction, range from -10 to 0."
+            },
+            "axis": {
+              "type": "number",
+              "description": "Axis value, range from 0 to 180."
+            },
+            "add": {
+              "type": "number",
+              "description": "Addition value, range from 0 to 4."
+            },
+            "deg": {
+              "type": "number",
+              "description": "Degression value, range from 0 to 360."
+            },
+            "base": {
+              "type": "string",
+              "enum": [
+                "IN",
+                "OUT",
+                "UP",
+                "DOWN"
+              ],
+              "description": "Direction of the base."
+            },
+            "pd": {
+              "type": "number",
+              "description": "Pupillary distance in mm for left eye."
+            },
+            "va": {
+              "type": "string",
+              "description": "Visual acuity for left eye."
+            }
+          },
+          "required": [
+            "visionType",
+            "sphere",
+            "cylinder",
+            "axis"
+          ]
         },
-        "OD": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Full correction line for right eye."
+        "treatment": {
+          "type": "string",
+          "description": "Special treatments or filters for lenses."
         },
-        "OS": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Full correction line for left eye."
-        },
-        "OU": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Full correction line for both eyes, if present."
-        },
-        "rightSphere": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Spherical value for right eye."
-        },
-        "rightCylinder": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Cylinder value for right eye."
-        },
-        "rightAxe": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Axis for right eye."
-        },
-        "rightAdd": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Additional correction (ADD) for right eye."
-        },
-        "rightDeg": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Degree value or rotation for right eye."
-        },
-        "rightPrism": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Prism value for right eye."
-        },
-        "rightBase": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Base direction for right eye."
-        },
-        "rightPD": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Pupillary distance for right eye."
-        },
-        "leftSphere": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Spherical value for left eye."
-        },
-        "leftCylinder": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Cylinder value for left eye."
-        },
-        "leftAxe": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Axis for left eye."
-        },
-        "leftAdd": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Additional correction (ADD) for left eye."
-        },
-        "leftDeg": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Degree value or rotation for left eye."
-        },
-        "leftPrism": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Prism value for left eye."
-        },
-        "leftBase": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Base direction for left eye."
-        },
-        "leftPD": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "description": "Pupillary distance for left eye."
+        "tint": {
+          "type": "string",
+          "description": "Color or tint applied to lenses."
         }
       },
       "required": [
-        "vision",
-        "VL",
-        "VP",
-        "VA"
+        "prescribedAt",
+        "visionType",
+        "right",
+        "left"
       ]
     }
   },
   "required": [
     "patient",
     "prescriber",
-    "dates",
-    "corrections"
+    "prescription"
   ]
 }
