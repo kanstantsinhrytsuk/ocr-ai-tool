@@ -1,8 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 
-export const useFileActions = (defaultValue: File[] = []) => {
+interface UseFileActionsProps {
+  defaultValue?: File[];
+  setFile: (file: File | null) => void;
+}
+
+export const useFileActions = ({ defaultValue = [], setFile }: UseFileActionsProps) => {
   const [files, setFiles] = useState(defaultValue);
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    if (files.length) {
+      setFile(files[0]);
+    } else {
+      setFile(null);
+    }
+  }, [files]);
 
   useEffect(() => {
     if (files.length) {

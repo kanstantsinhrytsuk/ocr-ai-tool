@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, IconButton } from "@mui/material";
 import { Stack, TextField } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { useFileActions } from '../../../hooks/useFileActions';
+import { useFileActions } from '@hooks/useFileActions';
 
 type Props = {
   defaultValue: File;
@@ -12,15 +12,7 @@ type Props = {
 
 export const TargetInput = ({ defaultValue, setFile }: Props) => {
   const initFiles: File[] = defaultValue ? [defaultValue] : [];
-  const { files, fileInputRef, handleRemove } = useFileActions(initFiles);
-
-  useEffect(() => {
-    if (files.length) {
-      setFile(files[0]);
-    } else {
-      setFile(null);
-    }
-  }, [files])
+  const { files, fileInputRef, handleRemove } = useFileActions({ defaultValue: initFiles, setFile });
 
   return (
     <>

@@ -1,9 +1,7 @@
-"use server";
-
-import { ACTION_STATUSES } from "../../constants/actions";
-import Ocr from "../../services/ocr";
-import { getBase64 } from "../../utils/getBase64";
-import { getTextFromFile } from "../../utils/getTextFromFile";
+import { Status } from "@constants/actions";
+import Ocr from "@services/ocr";
+import { getBase64 } from "@utils/getBase64";
+import { getTextFromFile } from "@utils/getTextFromFile";
 
 export const submit = async ({
   prompt,
@@ -14,14 +12,11 @@ export const submit = async ({
   const schema = schemaFile?.name ? await getTextFromFile(schemaFile) : null;
   const file = targetFile?.name ? await getBase64(targetFile) : fileURL;
 
-  if (!prompt || !file) {
-    return {
-      status: ACTION_STATUSES.error,
-      message: "Please provide all required data",
-    }
-  }
-
   try {
+    if (!prompt || !file) {
+      throw new Error("Please provide all required data");
+    }
+
     const message = await Ocr.getContentByFile({
       prompt,
       schema,
@@ -29,19 +24,16 @@ export const submit = async ({
     });
 
     if (!message) {
-      return {
-        status: ACTION_STATUSES.error,
-        message: "No data found",
-      }
+      throw new Error("No data found");
     }
 
     return {
-      status: ACTION_STATUSES.success,
+      status: Status.Success,
       message,
     }
   } catch (error) {
     return {
-      status: ACTION_STATUSES.error,
+      status: Status.Error,
       message: error.message,
     }
   }

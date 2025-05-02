@@ -1,4 +1,4 @@
-export const ACTION_STATUSES = {
-  success: "success",
-  error: "error",
+export enum Status {
+  Success = "success",
+  Error = "error",
 };

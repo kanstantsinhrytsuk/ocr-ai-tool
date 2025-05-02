@@ -1,4 +1,4 @@
-import defaultSchema from '../assets/schemas/prescription-schema.json';
+import defaultSchema from '@assets/schemas/prescription-schema.json';
 
 export const DEFAULT_FIELD_VALUES = {
   prompt: `Your task is to extract and structure the following glasses prescription information into a specific JSON format.

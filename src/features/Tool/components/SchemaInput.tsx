@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, IconButton, Stack } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import { useFileActions } from '../../../hooks/useFileActions';
-import { downloadFile } from '../../../utils/downloadFile';
+import { useFileActions } from '@hooks/useFileActions';
+import { downloadFile } from '@utils/downloadFile';
 
 type Props = {
   defaultValue: File;
@@ -13,15 +13,7 @@ type Props = {
 
 export const SchemaInput = ({ defaultValue, setFile }: Props) => {
   const initFiles: File[] = [defaultValue];
-  const { files, fileInputRef, handleRemove } = useFileActions(initFiles);
-
-  useEffect(() => {
-    if (files.length) {
-      setFile(files[0])
-    } else {
-      setFile(null);
-    }
-  }, [files])
+  const { files, fileInputRef, handleRemove } = useFileActions({ defaultValue: initFiles, setFile });
 
   return (
     <Stack direction="row" spacing={2} marginBottom={2}>

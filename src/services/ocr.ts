@@ -1,4 +1,4 @@
-import { DEFAULT_STRATEGY } from "../constants/strategies";
+import { DEFAULT_STRATEGY } from "@constants/strategies";
 import { getStrategy } from "./strategies";
 
 const strategy = getStrategy(process.env.CURRENT_STRATEGY || DEFAULT_STRATEGY);

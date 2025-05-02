@@ -1,11 +1,13 @@
 import { Button, FormGroup, LinearProgress, Stack, TextField } from "@mui/material";
 import React, { useState } from "react";
-import Markdown from 'react-markdown'
 
+import { DEFAULT_FIELD_VALUES } from "@constants/defaultFieldValues";
 import { submit } from "./actions";
+
 import { SchemaInput } from "./components/SchemaInput";
 import { TargetInput } from "./components/TargetInput";
-import { DEFAULT_FIELD_VALUES } from "../../constants/defaultFieldValues";
+import ResponseMessage from "./components/ResponseMessage";
+
 
 interface Fields {
   prompt: string;
@@ -20,7 +22,7 @@ function Tool() {
     status: '',
     message: ''
   })
-  const [fields, setFields] = useState<Fields>({
+  const [fields, setFields] = useState({
     prompt: DEFAULT_FIELD_VALUES.prompt,
     fileURL: "",
     schemaFile: DEFAULT_FIELD_VALUES.schemaFile,
@@ -75,11 +77,7 @@ function Tool() {
         </FormGroup>
       </form>
       { isPending && <LinearProgress /> }
-      { !isPending && result.message && (
-        <div style={{ backgroundColor: "#f8f8f8", padding: "10px 20px", borderRadius: 5 }}>
-          { result.message && <Markdown>{result.message}</Markdown> }
-        </div>
-      )}
+      { !isPending && result.status && <ResponseMessage result={result} />}
     </Stack>
   );
 }

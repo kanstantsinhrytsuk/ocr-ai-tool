@@ -1,7 +1,8 @@
 import { Mistral } from "@mistralai/mistralai";
+import type { ContentChunk } from "@mistralai/mistralai/models/components";
 import get from "lodash/get";
-import { getFileType } from "../../utils/getFileType";
-import { ContentChunk } from "@mistralai/mistralai/models/components";
+
+import { getFileType } from "@utils/getFileType";
 
 const client = new Mistral({
   apiKey: process.env.MISTRAL_API_KEY,

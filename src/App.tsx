@@ -1,6 +1,7 @@
+import React from "react";
 import { Container } from "@mui/material";
 
-import Tool from "./features/Tool";
+import Tool from "@features/Tool";
 
 const App = () => {
   return (
