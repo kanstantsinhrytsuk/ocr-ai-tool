@@ -76,7 +76,7 @@ const run = async ({
     console.info(fileContent);
     content.push({
       type: "text",
-      text: `### File content: ${fileContent}`,
+      text: `### File content in Markdown: ${fileContent}`,
     });
   }
 

@@ -19,6 +19,8 @@ export const submit = async ({
 
     const fileContent = await Ocr.extractFileContent(file);
 
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
     const message = await Ocr.run({
       prompt,
       schema,
