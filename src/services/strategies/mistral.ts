@@ -53,7 +53,7 @@ const extractText = async (file: string) => {
   return ocrResponse.pages[0]?.markdown || null;
 }
 
-const getContentByFile = async ({
+const getContentByFile = ({ useOcr = false }) => async ({
   prompt,
   schema = null,
   file,
@@ -65,13 +65,20 @@ const getContentByFile = async ({
     },
   ];
 
-  const extractedText = await extractText(file);
-  if (extractedText) {
+  if (useOcr) {
+    const extractedText = await extractText(file);
+    if (!extractedText) {
+      throw new Error("No text extracted from the image.");
+    }
+
     console.info(extractedText);
     content.push({
       type: "text",
       text: `### File content: ${extractedText}`,
     });
+  } else {
+    const fileEntity = await getFileEntity(file);
+    content.push(fileEntity);
   }
 
   if (schema) {
@@ -88,7 +95,7 @@ const getContentByFile = async ({
         {
           role: "user",
           content,
-        },
+        }
       ],
     });
 

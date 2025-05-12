@@ -4,7 +4,7 @@ import { getStrategy } from "./strategies";
 const strategy = getStrategy(process.env.CURRENT_STRATEGY || DEFAULT_STRATEGY);
 
 const Ocr = {
-  getContentByFile: strategy.getContentByFile,
+  getContentByFile: strategy.getContentByFile({ useOcr: false }),
 }
 
 Object.freeze(Ocr);
