@@ -41,7 +41,7 @@ const getFileEntity = async (file: string): Promise<Content> => {
   }
 }
 
-const extractText = async (file: string) => {
+const extractFileContent = async (file: string) => {
   const fileEntity = await getFileEntity(file);
 
   const ocrResponse = await client.ocr.process({
@@ -53,10 +53,10 @@ const extractText = async (file: string) => {
   return ocrResponse.pages[0]?.markdown || null;
 }
 
-const getContentByFile = ({ useOcr = false }) => async ({
+const run = async ({
   prompt,
   schema = null,
-  file,
+  fileContent = null,
 }) => {
   const content: ContentChunk[] = [
     {
@@ -65,26 +65,18 @@ const getContentByFile = ({ useOcr = false }) => async ({
     },
   ];
 
-  if (useOcr) {
-    const extractedText = await extractText(file);
-    if (!extractedText) {
-      throw new Error("No text extracted from the image.");
-    }
-
-    console.info(extractedText);
-    content.push({
-      type: "text",
-      text: `### File content: ${extractedText}`,
-    });
-  } else {
-    const fileEntity = await getFileEntity(file);
-    content.push(fileEntity);
-  }
-
   if (schema) {
     content.push({
       type: "text",
       text: `### Output Format (JSON Schema): ${schema}`,
+    });
+  }
+
+  if (fileContent) {
+    console.info(fileContent);
+    content.push({
+      type: "text",
+      text: `### File content: ${fileContent}`,
     });
   }
 
@@ -106,5 +98,6 @@ const getContentByFile = ({ useOcr = false }) => async ({
 }
 
 export default {
-  getContentByFile,
+  extractFileContent,
+  run,
 };

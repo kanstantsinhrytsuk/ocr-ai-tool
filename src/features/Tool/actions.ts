@@ -17,10 +17,12 @@ export const submit = async ({
       throw new Error("Please provide all required data");
     }
 
-    const message = await Ocr.getContentByFile({
+    const fileContent = await Ocr.extractFileContent(file);
+
+    const message = await Ocr.run({
       prompt,
       schema,
-      file,
+      fileContent,
     });
 
     if (!message) {
