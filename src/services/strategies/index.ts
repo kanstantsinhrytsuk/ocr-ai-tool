@@ -1,5 +1,7 @@
+import MistralStrategy from './mistral';
+
 const STRATEGIES = {
-  mistral: await import("./mistral"),
+  mistral: MistralStrategy,
 };
 
 export const getStrategy = (strategy) => {

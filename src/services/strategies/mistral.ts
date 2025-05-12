@@ -41,20 +41,38 @@ const getFileEntity = async (file: string): Promise<Content> => {
   }
 }
 
-export const getContentByFile = async ({
+const extractText = async (file: string) => {
+  const fileEntity = await getFileEntity(file);
+
+  const ocrResponse = await client.ocr.process({
+    model: "mistral-ocr-latest",
+    document: fileEntity,
+    includeImageBase64: true,
+  });
+
+  return ocrResponse.pages[0]?.markdown || null;
+}
+
+const getContentByFile = async ({
   prompt,
   schema = null,
   file,
 }) => {
-  const fileEntity = await getFileEntity(file);
-
   const content: ContentChunk[] = [
     {
       type: "text",
       text: prompt,
     },
-    fileEntity
   ];
+
+  const extractedText = await extractText(file);
+  if (extractedText) {
+    console.info(extractedText);
+    content.push({
+      type: "text",
+      text: `### File content: ${extractedText}`,
+    });
+  }
 
   if (schema) {
     content.push({
@@ -79,3 +97,7 @@ export const getContentByFile = async ({
     throw new Error(`Error processing image: ${error.message}`);
   }
 }
+
+export default {
+  getContentByFile,
+};
