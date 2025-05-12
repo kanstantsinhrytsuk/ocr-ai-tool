@@ -38,6 +38,7 @@ jobs:
       env:
         CURRENT_STRATEGY: ${{ vars.CURRENT_STRATEGY }}
         MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
     - name: List files in build output directory
       run: ls -al ./dist
