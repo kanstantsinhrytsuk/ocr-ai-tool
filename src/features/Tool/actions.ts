@@ -29,12 +29,12 @@ export const submit = async ({
 
     return {
       status: Status.Success,
-      message: JSON.stringify(result),
+      data: result,
     }
   } catch (error) {
     return {
       status: Status.Error,
-      message: error.message,
+      data: { message: error.message },
     }
   }
 };

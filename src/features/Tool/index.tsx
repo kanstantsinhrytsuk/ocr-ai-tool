@@ -1,7 +1,6 @@
 import { Button, FormGroup, LinearProgress, Stack } from "@mui/material";
 import React, { useState } from "react";
 
-import { DEFAULT_FIELD_VALUES } from "@constants/defaultFieldValues";
 import { submit } from "./actions";
 
 import { TargetInput } from "./components/TargetInput";
@@ -19,24 +18,24 @@ function Tool() {
   const [isPending, setIsPending] = useState(false);
   const [result, setResult] = useState({
     status: '',
-    message: ''
+    data: ''
   })
   const [fields, setFields] = useState({
     fileURL: "",
-    targetFile: DEFAULT_FIELD_VALUES.targetFile,
+    targetFile: null,
   });
 
-  // const handleChange = (fieldName: keyof Fields) => (e) => {
-  //   setFields({
-  //     ...fields,
-  //     [fieldName]: e.target.value
-  //   })
-  // }
-
-  const handleChangeFile = (fieldName: 'schemaFile' | 'targetFile') => (value: File| null) => {
+  const handleChangeFileURL = (value: string) => {
     setFields({
       ...fields,
-      [fieldName]: value
+      fileURL: value
+    })
+  }
+
+  const handleChangeFile = (value: File| null) => {
+    setFields({
+      ...fields,
+      targetFile: value
     })
   }
 
@@ -55,17 +54,11 @@ function Tool() {
       <h1>OCR AI Tool (Document Understanding lib)</h1>
       <form style={{ marginBottom: 20 }} onSubmit={handleSubmit}>
         <FormGroup sx={{ display: "flex", gap: 2 }}>
-          {/* <TextField
-            required
-            fullWidth
-            multiline
-            defaultValue={fields.prompt}
-            name="prompt"
-            label="Prompt"
-            onChange={handleChange('prompt')}
-          /> */}
-          {/* <SchemaInput defaultValue={fields.schemaFile} setFile={handleChangeFile('schemaFile')} /> */}
-          <TargetInput defaultValue={fields.targetFile} setFile={handleChangeFile('targetFile')} />
+          <TargetInput
+            defaultValue={fields.targetFile}
+            setFile={handleChangeFile}
+            setFileURL={handleChangeFileURL}
+          />
           <Button
             variant="contained"
             type="submit"
