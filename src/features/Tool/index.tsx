@@ -1,15 +1,14 @@
-import { Button, FormGroup, LinearProgress, Stack, TextField } from "@mui/material";
+import { Button, FormGroup, LinearProgress, Stack } from "@mui/material";
 import React, { useState } from "react";
 
 import { DEFAULT_FIELD_VALUES } from "@constants/defaultFieldValues";
 import { submit } from "./actions";
 
-import { SchemaInput } from "./components/SchemaInput";
 import { TargetInput } from "./components/TargetInput";
 import ResponseMessage from "./components/ResponseMessage";
 
 
-interface Fields {
+export interface Fields {
   prompt: string;
   fileURL: string;
   schemaFile: File;
@@ -23,18 +22,16 @@ function Tool() {
     message: ''
   })
   const [fields, setFields] = useState({
-    prompt: DEFAULT_FIELD_VALUES.prompt,
     fileURL: "",
-    schemaFile: DEFAULT_FIELD_VALUES.schemaFile,
     targetFile: DEFAULT_FIELD_VALUES.targetFile,
   });
 
-  const handleChange = (fieldName: keyof Fields) => (e) => {
-    setFields({
-      ...fields,
-      [fieldName]: e.target.value
-    })
-  }
+  // const handleChange = (fieldName: keyof Fields) => (e) => {
+  //   setFields({
+  //     ...fields,
+  //     [fieldName]: e.target.value
+  //   })
+  // }
 
   const handleChangeFile = (fieldName: 'schemaFile' | 'targetFile') => (value: File| null) => {
     setFields({
@@ -47,7 +44,7 @@ function Tool() {
     e.preventDefault();
     setIsPending(true);
 
-    const result = await submit(fields);
+    const result = await submit({ targetFile: fields.targetFile, fileURL: fields.fileURL });
     setResult(result);
 
     setIsPending(false);
@@ -55,10 +52,10 @@ function Tool() {
 
   return (
     <Stack paddingY={2}>
-      <h1>OCR AI Tool</h1>
+      <h1>OCR AI Tool (Document Understanding lib)</h1>
       <form style={{ marginBottom: 20 }} onSubmit={handleSubmit}>
         <FormGroup sx={{ display: "flex", gap: 2 }}>
-          <TextField
+          {/* <TextField
             required
             fullWidth
             multiline
@@ -66,8 +63,8 @@ function Tool() {
             name="prompt"
             label="Prompt"
             onChange={handleChange('prompt')}
-          />
-          <SchemaInput defaultValue={fields.schemaFile} setFile={handleChangeFile('schemaFile')} />
+          /> */}
+          {/* <SchemaInput defaultValue={fields.schemaFile} setFile={handleChangeFile('schemaFile')} /> */}
           <TargetInput defaultValue={fields.targetFile} setFile={handleChangeFile('targetFile')} />
           <Button
             variant="contained"
