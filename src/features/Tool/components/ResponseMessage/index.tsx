@@ -1,22 +1,30 @@
 import React from "react";
-import Markdown from "react-markdown";
+import ReactJson from "react-json-view";
 
-import type { Status } from "@constants/actions";
+import { Status } from "@constants/actions";
 
 import { Message } from "./styled";
 
 
 interface Result {
   status: Status;
-  message: string;
+  data: object;
 }
 
 const ResponseMessage = ({ result }: { result: Result }) => {
-  const { status, message } = result;
+  const { status, data } = result;
+
+  if (status === Status.Error) {
+    return (
+      <Message status={status}>
+        {data.message || "An error occurred"}
+      </Message>
+    );
+  }
 
   return (
     <Message status={status}>
-      <Markdown>{message}</Markdown>
+      <ReactJson src={data} />
     </Message>
   );
 }

@@ -8,9 +8,10 @@ import { useFileActions } from '@hooks/useFileActions';
 type Props = {
   defaultValue: File;
   setFile: (file: File | null) => void;
+  setFileURL: (fileURL: string) => void;
 };
 
-export const TargetInput = ({ defaultValue, setFile }: Props) => {
+export const TargetInput = ({ defaultValue, setFile, setFileURL }: Props) => {
   const initFiles: File[] = defaultValue ? [defaultValue] : [];
   const { files, fileInputRef, handleRemove } = useFileActions({ defaultValue: initFiles, setFile });
 
@@ -23,6 +24,7 @@ export const TargetInput = ({ defaultValue, setFile }: Props) => {
           type="url"
           name="fileURL"
           label="URL"
+          onChange={(e) => setFileURL(e.target.value)}
         />
         <Button
           component="label"
