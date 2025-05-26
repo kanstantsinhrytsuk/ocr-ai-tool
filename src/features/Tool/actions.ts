@@ -1,9 +1,8 @@
 import { Status } from "@constants/actions";
 import { getBase64String } from "@utils/getBase64";
-import { OCRInput } from "document-understanding";
 import { MistralPrescriptionUnderstanding, PrescriptionDocuments } from "document-understanding/prescription";
 
-const PrescriptionUnderstandingService = MistralPrescriptionUnderstanding({
+const prescriptionUnderstanding = MistralPrescriptionUnderstanding({
   apiKey: process.env.MISTRAL_API_KEY,
 });
 
@@ -19,11 +18,15 @@ export const submit = async ({
       throw new Error("Please provide all required data");
     }
 
-    const result: PrescriptionDocuments = await PrescriptionUnderstandingService.understand({
+    if (prescriptionUnderstanding.isInitialized === false) {
+      throw prescriptionUnderstanding.error || new Error("Prescription Understanding service is not initialized");
+    }
+
+    const result: PrescriptionDocuments = await prescriptionUnderstanding.service.understand({
       source: targetFile?.name ? 'base64' : 'url',
       file: file,
       documentType: 'image',
-    } as OCRInput);
+    });
 
     console.log({ result });
 
