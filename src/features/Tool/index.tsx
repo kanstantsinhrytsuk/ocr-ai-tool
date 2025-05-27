@@ -1,15 +1,13 @@
-import { Button, FormGroup, LinearProgress, Stack, TextField } from "@mui/material";
+import { Button, FormGroup, LinearProgress, Stack, Box } from "@mui/material";
 import React, { useState } from "react";
 
-import { DEFAULT_FIELD_VALUES } from "@constants/defaultFieldValues";
 import { submit } from "./actions";
 
-import { SchemaInput } from "./components/SchemaInput";
 import { TargetInput } from "./components/TargetInput";
 import ResponseMessage from "./components/ResponseMessage";
 
 
-interface Fields {
+export interface Fields {
   prompt: string;
   fileURL: string;
   schemaFile: File;
@@ -20,26 +18,24 @@ function Tool() {
   const [isPending, setIsPending] = useState(false);
   const [result, setResult] = useState({
     status: '',
-    message: ''
+    data: ''
   })
   const [fields, setFields] = useState({
-    prompt: DEFAULT_FIELD_VALUES.prompt,
     fileURL: "",
-    schemaFile: DEFAULT_FIELD_VALUES.schemaFile,
-    targetFile: DEFAULT_FIELD_VALUES.targetFile,
+    targetFile: null,
   });
 
-  const handleChange = (fieldName: keyof Fields) => (e) => {
+  const handleChangeFileURL = (value: string) => {
     setFields({
       ...fields,
-      [fieldName]: e.target.value
+      fileURL: value
     })
   }
 
-  const handleChangeFile = (fieldName: 'schemaFile' | 'targetFile') => (value: File| null) => {
+  const handleChangeFile = (value: File| null) => {
     setFields({
       ...fields,
-      [fieldName]: value
+      targetFile: value
     })
   }
 
@@ -47,7 +43,7 @@ function Tool() {
     e.preventDefault();
     setIsPending(true);
 
-    const result = await submit(fields);
+    const result = await submit({ targetFile: fields.targetFile, fileURL: fields.fileURL });
     setResult(result);
 
     setIsPending(false);
@@ -55,29 +51,25 @@ function Tool() {
 
   return (
     <Stack paddingY={2}>
-      <h1>OCR AI Tool</h1>
-      <form style={{ marginBottom: 20 }} onSubmit={handleSubmit}>
-        <FormGroup sx={{ display: "flex", gap: 2 }}>
-          <TextField
-            required
-            fullWidth
-            multiline
-            defaultValue={fields.prompt}
-            name="prompt"
-            label="Prompt"
-            onChange={handleChange('prompt')}
-          />
-          <SchemaInput defaultValue={fields.schemaFile} setFile={handleChangeFile('schemaFile')} />
-          <TargetInput defaultValue={fields.targetFile} setFile={handleChangeFile('targetFile')} />
-          <Button
-            variant="contained"
-            type="submit"
-            disabled={isPending}
-          >Process</Button>
-        </FormGroup>
-      </form>
-      { isPending && <LinearProgress /> }
-      { !isPending && result.status && <ResponseMessage result={result} />}
+      <h1 style={{ textAlign: 'center' }}>OCR AI Tool (Document Understanding lib)</h1>
+      <Box sx={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <form style={{ marginBottom: 20, width: 600, maxWidth: '100%' }} onSubmit={handleSubmit}>
+          <FormGroup sx={{ display: "flex", gap: 2 }}>
+            <TargetInput
+              defaultValue={fields.targetFile}
+              setFile={handleChangeFile}
+              setFileURL={handleChangeFileURL}
+            />
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={isPending}
+            >Process</Button>
+          </FormGroup>
+          { isPending && <LinearProgress /> }
+        </form>
+        { !isPending && result.status && <ResponseMessage result={result} />}
+      </Box>
     </Stack>
   );
 }
