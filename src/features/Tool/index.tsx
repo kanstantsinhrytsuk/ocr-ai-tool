@@ -1,4 +1,4 @@
-import { Button, FormGroup, LinearProgress, Stack } from "@mui/material";
+import { Button, FormGroup, LinearProgress, Stack, Box } from "@mui/material";
 import React, { useState } from "react";
 
 import { submit } from "./actions";
@@ -51,23 +51,25 @@ function Tool() {
 
   return (
     <Stack paddingY={2}>
-      <h1>OCR AI Tool (Document Understanding lib)</h1>
-      <form style={{ marginBottom: 20 }} onSubmit={handleSubmit}>
-        <FormGroup sx={{ display: "flex", gap: 2 }}>
-          <TargetInput
-            defaultValue={fields.targetFile}
-            setFile={handleChangeFile}
-            setFileURL={handleChangeFileURL}
-          />
-          <Button
-            variant="contained"
-            type="submit"
-            disabled={isPending}
-          >Process</Button>
-        </FormGroup>
-      </form>
-      { isPending && <LinearProgress /> }
-      { !isPending && result.status && <ResponseMessage result={result} />}
+      <h1 style={{ textAlign: 'center' }}>OCR AI Tool (Document Understanding lib)</h1>
+      <Box sx={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <form style={{ marginBottom: 20, width: 600, maxWidth: '100%' }} onSubmit={handleSubmit}>
+          <FormGroup sx={{ display: "flex", gap: 2 }}>
+            <TargetInput
+              defaultValue={fields.targetFile}
+              setFile={handleChangeFile}
+              setFileURL={handleChangeFileURL}
+            />
+            <Button
+              variant="contained"
+              type="submit"
+              disabled={isPending}
+            >Process</Button>
+          </FormGroup>
+          { isPending && <LinearProgress /> }
+        </form>
+        { !isPending && result.status && <ResponseMessage result={result} />}
+      </Box>
     </Stack>
   );
 }
